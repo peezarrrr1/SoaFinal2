@@ -1,28 +1,31 @@
 body {
-  padding: 50px;
+  
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
 }
-.d-flex ,.p-1 ,.bg-primary{
-  margin-top: 625px;
+.head{
+  background-color: #808080!important;
+
 }
 .cure{
 background-color:  greenyellow!important;
+margin: 33px;
 }
 .infect{
   background-color: yellow!important;
+  margin: 33px;
 }
 .dead {
   background-color: red!important;
+  margin: 33px;
 }
 .mr-2  ,.border ,.text-center{
   
   margin-top: 10px;
 }
 .navbar ,.navbar-expand-sm ,.navbar-light {
-  background-color: greenyellow!important;
-  margin-top: -50px;
+
 }

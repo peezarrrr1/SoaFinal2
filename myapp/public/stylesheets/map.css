@@ -1,0 +1,35 @@
+#mapid1 {
+    height: 600px;
+}
+#mapid2 {
+    height: 600px;
+   
+}
+#mapid3 {
+    height: 600px;
+    
+}
+#mapid4 {
+    height: 600px;
+    
+}
+.btn-normal {
+    color:black;
+    background-color: white;
+    border-color:white;
+}
+.btn-warning {
+    color: black;
+    background-color:#FFD700;
+    border-color: #FFD700;
+}
+.btn-danger {
+    color: white;
+    background-color: #B22222;
+    border-color: #B22222;
+}
+.btn-success {
+    color: white;
+    background-color: #008000;
+    border-color: #008000;
+}

@@ -1,24 +1,19 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <title>พื้นที่พบผู้ติดเชื้อ</title>
+  <head>
+    <title>Title</title>
+    
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
-    <link rel="stylesheet" href="/stylesheets/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Prompt&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <style>
-        #map {position: absolute;top: 100px;bottom: 100px;left: 100px;right: 100px;}
-    </style>
- 
+    <link rel="stylesheet" href="stylesheets/map.css">
+    <link rel="stylesheet" href="stylesheets/style.css">
 </head>
-<body>
+  <body>
     
     <nav class="navbar navbar-expand-sm navbar-light bg-light">
         <a class="navbar-brand" href="#">Navbar</a>
@@ -29,7 +24,7 @@
         <div class="collapse navbar-collapse" id="collapsibleNavId">
           <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item active">
-              <a class="nav-link" href="index">Home <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="map">Map</a>
@@ -45,46 +40,168 @@
           </form>
         </div>
       </nav>
-      <div id = "map"></div>
-    
-       <div class="d-flex p-1 bg-primary" style="background-color: white;">
-        <div class=" p-2 mr-2 bg-light border text-center infect" >
+      
+      <% resultData.forEach(function(data){ %>
+
+       <div class="d-flex p-1 bg-primary head" >
+        <div class="p-2 mr-2 bg-light border text-center infect" >
             <div>
                 <B>อัตราการติดเชื้อสะสม</B>
-                
             </div>
-            <%= totalObject.totalConfirmed %>
+            <%= data.confirm %>
                 <B>คน</B>
         </div>
         <div class=" p-2 mr-2 bg-light border1 text-center cure">
             <div>
                 <B>อัตราการหายจากโรคสะสม</B>
             </div>
-            <%= totalObject.totalRecovered %>
+            <%= data.recovered %>
                 <B>คน</B>
         </div>
         <div class=" p-2 mr-2 bg-light border2 text-center dead">
             <div>
                 <B>อัตราการเสียชีวิตสะสม</B>
             </div>
-            <%= totalObject.totalDeath %>
+            <%= data.death %>
                 <B>คน</B>
         </div>
     </div>
+    <div class="row mb-3 justify-content-center">
+      <button type="button" class="btn btn-normal mr-3" id="all" value="3">All</button>
+      <button type="button" class="btn btn-warning mr-3" id="infect" value="1">Confirmed</button>
+      <button type="button" class="btn btn-danger mr-3" id="dead" value="2">Death</button>
+      <button type="button" class="btn btn-success mr-3" id="recov" value="3">Recovered</button>
+  </div>
+    <div id="mapid1"></div>
+    <div id="mapid2"></div>
+    <div id="mapid3"></div>
+    <div id="mapid4"></div>
+
+    <% })  %>
+    
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
     <script>
-        var map = L.map('map').setView([0,0],1);
-        L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=iZosU0G5gJ7TkjpDdaHg',{
-            attribution:'<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
-        }).addTo(map);
-        var marker = L.marker([51.5, -0.09]).addTo(map) ;
+      var map1 = L.map('mapid1').setView([0, 0], 2);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map1);
+      var map2 = L.map('mapid2').setView([0, 0], 2);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map2);
+      var map3 = L.map('mapid3').setView([0, 0], 2);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map3);
+      var map4 = L.map('mapid4').setView([0, 0], 2);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map4);
+
+      $("#mapid1,#mapid2,#mapid3").hide();
+
+        $('#infect').click(function() {
+            $("#mapid2").show();
+            $("#mapid1").hide();
+            $("#mapid3").hide();
+            $("#mapid4").hide();
+
+        })
+        $('#dead').click(function() {
+            $("#mapid1").show();
+            $("#mapid2").hide();
+            $("#mapid3").hide();
+            $("#mapid4").hide();
+        })
+        $('#recov').click(function() {
+            $("#mapid3").show();
+            $("#mapid1").hide();
+            $("#mapid2").hide();
+            $("#mapid4").hide();
+        })
+        $('#all').click(function() {
+            $("#mapid4").show();
+            $("#mapid1").hide();
+            $("#mapid2").hide();
+            $("#mapid3").hide();
+        })
+  </script>
+
+  
+    <script>
+        var Icon = new L.Icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [20, 30],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [5, 5]
+        });
+        
+         '<% mapData.forEach(function(data){ %>'
+             var markers = [
+                 ["<b style='font-size:15pt;'> <%=data.country%> </b> <br><b style='font-size:10pt;'> Province : <%=data.province%><b><br><b style='font-size:8pt;'> Confirmed : <%=data.confirm%><b> <br><b style='font-size:8pt;'> Death : <%=data.dead%><b> <br><b style='font-size:8pt;'> Recovered : <%=data.recover%><b>", ('<%=data.lat%>'), ('<%=data.long%>')],
+             ];
+            for (var i = 0; i < markers.length; i++) {
+                 marker = L.marker([markers[i][1], markers[i][2]], {
+                         icon: Icon
+                     })
+                     .bindPopup(markers[i][0])
+                     .openPopup()
+                     .addTo(map4);
+             }
+             '<% }); %>'
+        
+            '<% mapData.forEach(function(data){ %>'
+            var markers1 = [
+                ["<b style='font-size:15pt;'> <%=data.country%> </b> <br><b style='font-size:10pt;'> Province : <%=data.province%><b><br><b style='font-size:8pt;'>  Death : <%=data.dead%><b> <br><b style='font-size:8pt;'>", ('<%=data.lat%>'), ('<%=data.long%>')],
+            ];
+            for (var i = 0; i < markers1.length; i++) {
+                marker = L.marker([markers1[i][1], markers1[i][2]], {
+                        icon: Icon
+                    })
+                    .bindPopup(markers1[i][0])
+                    .openPopup()
+                    .addTo(map1);
+            }
+            '<% }); %>'
+
+            '<% mapData.forEach(function(data){ %>'
+             var markers2 = [
+                 ["<b style='font-size:15pt;'> <%=data.country%> </b> <br><b style='font-size:10pt;'> Province : <%=data.province%><b><br><b style='font-size:8pt;'> Confirmed : <%=data.confirm%><b> <br><b style='font-size:8pt;'> ", ('<%=data.lat%>'), ('<%=data.long%>')],
+             ];
+            for (var i = 0; i < markers.length; i++) {
+                 marker = L.marker([markers2[i][1], markers2[i][2]], {
+                         icon: Icon
+                     })
+                     .bindPopup(markers2[i][0])
+                     .openPopup()
+                     .addTo(map2);
+             }
+             '<% }); %>'
+
+             '<% mapData.forEach(function(data){ %>'
+              var markers3 = [
+                 ["<b style='font-size:15pt;'> <%=data.country%> </b> <br><b style='font-size:10pt;'> Province : <%=data.province%><b><br><b style='font-size:8pt;'> Recovered : <%=data.recover%><b>", ('<%=data.lat%>'), ('<%=data.long%>')],
+              ];
+             for (var i = 0; i < markers.length; i++) {
+                  marker = L.marker([markers3[i][1], markers3[i][2]], {
+                         icon: Icon
+                      })
+                     .bindPopup(markers3[i][0])
+                     .openPopup()
+                      .addTo(map3);
+              }
+              '<% }); %>'
+
+
+            
     </script>
-     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-     <script src="/javascripts/Map.js"></script>
-     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-     <script>
-         getMap(`<%-JSON.stringify(Maps) %>`);
-     </script>
+  
 </body>
 </html>
